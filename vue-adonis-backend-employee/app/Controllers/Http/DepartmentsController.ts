@@ -2,8 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Departments from "App/Models/Department";
 import DepartmentValidator from "App/Validators/DepartmentValidator";
-import { DateTime } from "luxon";
-
 export default class DepartmentsController {
 
     public async insertRecord({request} : HttpContextContract){
@@ -12,8 +10,8 @@ export default class DepartmentsController {
            const result = await request.validate(DepartmentValidator)
             const deptDetails = new Departments();
             deptDetails.name = result.name;
-            deptDetails.createdAt = DateTime.now()
-            deptDetails.updatedAt = DateTime.now()
+            // deptDetails.createdAt = DateTime.now()
+            // deptDetails.updatedAt = DateTime.now()
             deptDetails.save();
 
             return "Inserted Successfully" 
@@ -33,7 +31,7 @@ export default class DepartmentsController {
             const valDept = await request.validate(DepartmentValidator)
             const deptDetails =  await Departments.findOrFail(Number(request.input('id')));
             deptDetails.name = valDept.name;
-            deptDetails.updatedAt = DateTime.now()
+            // deptDetails.updatedAt = DateTime.now()
             deptDetails.save();
             return "Department Details Successfully Updated"
         }catch(err){

@@ -1,5 +1,9 @@
 <script setup>
 import "../assets/bootstrap.css"
+import DatePicker from 'vue2-datepicker';
+import '../assets/datepicker.css';
+import dateFormat, { masks } from "dateformat";
+
 
 </script>
 <template>
@@ -37,7 +41,7 @@ import "../assets/bootstrap.css"
           <label><b>Department Name</b></label>
           <select v-model="departmentId" class="dropdownStyle">
             <option value="" disabled hidden>Select Department</option>
-            <option v-for="dept in deptArray" v-bind:key="dept.dept_name" v-bind:value="dept.dept_id">{{ dept.dept_name }}</option>
+            <option v-for="departments in deptArray" v-bind:key="departments.name" v-bind:value="departments.id">{{ departments.name }}</option>
           </select>
 
         </div>
@@ -107,10 +111,10 @@ import "../assets/bootstrap.css"
               {{employee.name}}
             </td>
             <td class = "col" >
-              {{employee.dob}}
+              {{dateFormat(employee.dob , "mmmm dd,yyyy")}}
             </td>
             <td class = "col">
-              {{employee.doj}}
+                {{dateFormat(employee.doj , "mmmm dd,yyyy")}}
             </td>
             <td class = "col">
               {{employee.email}}
@@ -118,8 +122,11 @@ import "../assets/bootstrap.css"
             <td class="col">
               {{employee.phone}}
             </td>
+            <td style="display: none">
+              {{employee.departmentId}}
+            </td>
             <td class="col" >
-              {{employee.department_name}}
+              {{employee.departmentName}}
             </td>
 
             <td class="col">
@@ -153,6 +160,7 @@ export default {
     doj : "",
     phone: "",
     departmentId:"",
+    departmentName:"",
     employee:"",
 
     categories: [
@@ -211,6 +219,7 @@ export default {
     const tableDetails = await this.instance.get("/employeeTable/fetchJoin")
     this.allRecords = tableDetails.data
     console.log(tableDetails.data)
+    console.log(this.allRecords)
 
     const deptTableDetails = await this.instance.get("/departmentTable/fetchAll")
     this.deptArray = deptTableDetails.data.reverse()
@@ -272,11 +281,13 @@ export default {
 
     editButton(user){
 
-      this.id = user.emp_id;
-      this.name = user.emp_name;
-      this.email = user.emp_email;
-      this.phone = user.emp_phone_no;
-      this.deptId = user.dept_id;
+      this.id = user.id;
+      this.name = user.name;
+      this.email = user.email;
+      this.phone = user.phone;
+      this.departmentId = user.departmentId;
+      this.dob = new Date(user.dob)
+      this.doj = new Date(user.doj)
       this.isHidden = false
 
     },
@@ -299,7 +310,7 @@ export default {
       if((this.selectedItem && this.selectedCategory === 1)){
         this.allRecords = tableDetails.data.filter(el => {
                //const num = parseInt()
-              return  el.dept_id == this.selectedItem;
+              return  el.departmentId == this.selectedItem;
             })
       }
 
@@ -323,7 +334,7 @@ export default {
     async deleteButton(user){
       const allRecords = this.allRecords;
       const data ={
-        id : user.emp_id,
+        id : user.id,
       }
       const result = await this.instance.post('/employeeTable/deleteRecord' ,data).catch("error")
       alert(result.data)
@@ -500,6 +511,7 @@ input[type = "number"]{
 }
 
 .totalRecords{
+  color: white;
   text-align: center;
 }
 

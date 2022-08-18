@@ -406,7 +406,9 @@ input[type = "number"]{
   box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1);
 }
 
+
 .totalRecords{
+  color: white;
   text-align: center;
 }
 

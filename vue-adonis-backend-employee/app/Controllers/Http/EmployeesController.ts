@@ -2,7 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Employees from 'App/Models/Employee';
 import Log from 'App/Models/Log';
 import EmployeeValidator from 'App/Validators/EmployeeValidator';
-import { DateTime } from 'luxon';
 
 export default class EmployeesController {
 
@@ -18,10 +17,10 @@ export default class EmployeesController {
             empDetails.phone = BigInt(result.phone)
             empDetails.email = result.email;
             empDetails.departmentId = result.departmentId
-            empDetails.createdAt = DateTime.now()
-            empDetails.updatedAt = DateTime.now()
+            // empDetails.createdAt = DateTime.now()
+            // empDetails.updatedAt = DateTime.now()
             logDetails.action = "Insert"
-            logDetails.performedAt = DateTime.now()
+            // logDetails.performedAt = DateTime.now()
             empDetails.save();
             logDetails.save()
             return "Inserted Successfully"
@@ -45,7 +44,7 @@ export default class EmployeesController {
             empDetails.phone = BigInt(valEmp.phone)
             empDetails.email = valEmp.email
             empDetails.departmentId = valEmp.departmentId
-            empDetails.updatedAt = DateTime.now()
+            // empDetails.updatedAt = DateTime.now()
             empDetails.save();
             return "Employee details successfully updated"
         } catch (err) {
@@ -89,12 +88,28 @@ export default class EmployeesController {
             .select('employees.phone')
 
             
+        const FinalData:any = []
 
-        console.log(data[0].$extras['department_name'])
-        console.log(data)
-        // return data.sort((a, b) => {
-        //     return a.id - b.id
-        // });
-        return data
+        data.forEach(element => {
+
+            FinalData.push({
+                id : element.$attributes.id,
+                name : element.$attributes.name,
+                dob : element.$attributes.dob,
+                doj : element.$attributes.doj,
+               email : element.$attributes.email,
+                phone : element.$attributes.phone,
+               departmentId : element.$attributes.departmentId,
+                departmentName : element.$extras['department_name'],
+            })
+
+            // console.log(data)
+            // return data
+        });
+        //return FinalData.reverse()
+
+        return FinalData.sort((a: { id: number; },b: { id: number; })=>{
+            return a.id - b.id
+        });
     }
 }
