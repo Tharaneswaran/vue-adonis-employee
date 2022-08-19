@@ -323,7 +323,9 @@ export default {
         name: this.name,
         email: this.email,
         phone: this.phone ,
-        deptId: this.deptId,
+        dob:this.dob,
+        doj:this.doj,
+        departmentId: this.departmentId,
       }
       const result = await this.instance.post('/employeeTable/updateRecord' , data ).catch("Error")
       this.isHidden = false;

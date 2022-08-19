@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Employees from 'App/Models/Employee';
-import Log from 'App/Models/Log';
 import EmployeeValidator from 'App/Validators/EmployeeValidator';
 
 export default class EmployeesController {
@@ -10,7 +9,7 @@ export default class EmployeesController {
 
             const result = await request.validate(EmployeeValidator)
             const empDetails = new Employees();
-            const logDetails = new Log();
+            // const logDetails = new Log();
             empDetails.name = result.name;
             empDetails.dob = result.dob
             empDetails.doj = result.doj
@@ -19,10 +18,10 @@ export default class EmployeesController {
             empDetails.departmentId = result.departmentId
             // empDetails.createdAt = DateTime.now()
             // empDetails.updatedAt = DateTime.now()
-            logDetails.action = "Insert"
+            // logDetails.action = "Insert"
             // logDetails.performedAt = DateTime.now()
             empDetails.save();
-            logDetails.save()
+            // logDetails.save()
             return "Inserted Successfully"
         }
         catch (error) {
@@ -34,7 +33,6 @@ export default class EmployeesController {
 
 
     public async updateRecord({ request }: HttpContextContract) {
-
         try {
             const valEmp = await request.validate(EmployeeValidator)
             const empDetails = await Employees.findOrFail(request.input('id'));

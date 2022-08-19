@@ -1,0 +1,37 @@
+create trigger logs_trigger
+
+                  after insert or update or delete on public.employees
+
+                  for each row 
+
+                  execute procedure logs();
+                  
+create or replace function logs() returns trigger  
+
+                 as  
+
+                 $logs$
+
+                 begin
+
+                 if (TG_OP = 'DELETE') THEN
+
+                 insert into public.logs(action, performed_at) values ('Delete', now());
+                 
+                 elsif (TG_OP = 'UPDATE') THEN
+
+                 insert into public.logs(action, performed_at) values ('Update', now());
+
+                 elsif (TG_OP = 'INSERT') THEN
+
+                 insert into public.logs(action, performed_at) values ('Insert', now());
+
+                 end if;
+
+                 return null;
+
+                 end;
+
+                 $logs$ 
+
+                 language plpgsql;
