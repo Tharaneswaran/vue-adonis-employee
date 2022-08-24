@@ -168,10 +168,10 @@ export default {
       { id: 1, name: "DeptName" }
     ],
     items: [
-      { id: 0, category_id: 0, name: "All" },
+      { id: 0, category_id: 0, name: "All" , value : 'asc'},
       { id: 1, category_id: 0, name: "1-5" },
       { id : 2 , category_id: 0 ,name : "5-10"} ,
-      { id : 3 , category_id: 0 ,name : "Descending"},
+      { id : 3 , category_id: 0 ,name : "Descending", value: 'desc'},
 
       // { id: 1, category_id: 1, name: "DevOps" },
       // { id: 2, category_id: 1, name: "IOT" },
@@ -293,25 +293,35 @@ export default {
     },
 
     async filterByDeptName(selectedItem){
-      const tableDetails = await this.instance.get("/employeeTable/fetchJoin")
-      console.log(tableDetails.data)
       if(this.selectedItem === 0 && this.selectedCategory === 0){
+        const sortManner = 'asc'
+        const tableDetails = await this.instance.get("/employeeTable/fetchJoin",{params:{sortManner}})
         return this.allRecords = tableDetails.data
       }
       if(this.selectedItem === 1 && this.selectedCategory === 0){
+        const sortManner = 'asc'
+        const tableDetails = await this.instance.get("/employeeTable/fetchJoin",{params:{sortManner}})
         return this.allRecords = tableDetails.data.slice(0,5)
       }
       if(this.selectedItem === 2 && this.selectedCategory === 0){
+        const sortManner = 'asc'
+        const tableDetails = await this.instance.get("/employeeTable/fetchJoin",{params:{sortManner}})
         return this.allRecords = tableDetails.data.slice(5,10)
       }
       if(this.selectedItem === 3 && this.selectedCategory === 0){
-        return this.allRecords = tableDetails.data.reverse()
+        const sortManner = 'desc'
+        const tableDetails = await this.instance.get("/employeeTable/fetchJoin",{params:{sortManner}})
+        return this.allRecords = tableDetails.data
       }
       if((this.selectedItem && this.selectedCategory === 1)){
-        this.allRecords = tableDetails.data.filter(el => {
-               //const num = parseInt()
-              return  el.departmentId == this.selectedItem;
-            })
+        const selectedDeptId = this.selectedItem
+        const sortManner = 'asc'
+        const tableDetails = await this.instance.get("/employeeTable/fetchByDept",{params:{sortManner , selectedDeptId}})
+        // this.allRecords = tableDetails.data.filter(el => {
+        //        //const num = parseInt()
+        //       return  el.departmentId == this.selectedItem;
+        //     })
+        return this.allRecords = tableDetails.data
       }
 
     },

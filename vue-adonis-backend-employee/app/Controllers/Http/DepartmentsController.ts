@@ -53,10 +53,11 @@ export default class DepartmentsController {
     }
 
 
-    public async fetchAll(){
+    public async fetchAll({request} : HttpContextContract){
         try{
-           const all = await Departments.all();
-           return all.reverse();
+           const all = await Departments.query()
+                                        .orderBy('id',request.input('sortManner'))
+           return all
         }
        catch{
         return "Cannot fetch Data"

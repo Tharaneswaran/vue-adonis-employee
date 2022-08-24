@@ -38,7 +38,7 @@ import "../assets/bootstrap.css"
         </label>
 
         <label><b>Value</b>&nbsp;
-          <select class="dropdownStyle" name="item" id="item" v-model="selectedItem" @change = "filterByname(selectedItem)">
+          <select class="dropdownStyle" name="item" id="item" v-model="selectedItem" @change = "filterByName(selectedItem)">
             <option value="" disabled hidden>Select Value</option>
             <option v-for="item in filteredItems" v-bind:value="item.id">
               {{ item.name }}
@@ -119,7 +119,6 @@ export default {
       }})
     this.selectedCategory = 0;
     this.selectedItem = 0;
-
     const deptTableDetails = await this.instance.get("/departmentTable/fetchAll")
     this.allRecords = deptTableDetails.data
   },
@@ -149,20 +148,25 @@ export default {
 
     },
 
-    async filterByname(selectedItem){
-      const tableDetails = await this.instance.get("/departmentTable/fetchAll")
-      console.log(tableDetails.data)
+    async filterByName(selectedItem){
+
       if(this.selectedItem === 0 && this.selectedCategory === 0){
+        const sortManner = 'asc'
+        const tableDetails = await this.instance.get("/departmentTable/fetchAll" , {params:{sortManner}})
         return this.allRecords = tableDetails.data
       }
       if(this.selectedItem === 1 && this.selectedCategory === 0){
+        const tableDetails = await this.instance.get("/departmentTable/fetchAll")
         return this.allRecords = tableDetails.data.slice(0,5)
       }
       if(this.selectedItem === 2 && this.selectedCategory === 0){
+        const tableDetails = await this.instance.get("/departmentTable/fetchAll")
         return this.allRecords = tableDetails.data.slice(5,10)
       }
       if(this.selectedItem === 3 && this.selectedCategory === 0){
-        return this.allRecords = tableDetails.data.reverse()
+        const sortManner = 'desc'
+        const tableDetails = await this.instance.get("/departmentTable/fetchAll" ,{params:{sortManner}})
+        return this.allRecords = tableDetails.data
       }
     },
 

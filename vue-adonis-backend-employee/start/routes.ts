@@ -32,6 +32,7 @@ Route.group(() =>{
     Route.post('/updateRecord' , 'EmployeesController.updateRecord')
     Route.get('/fetchJoin' , 'EmployeesController.fetchJoin')
     Route.post('/deleteRecord','EmployeesController.deleteRecord')
+    Route.get('/fetchByDept','EmployeesController.fetchByDept')
   
   }).prefix('employeeTable')
 
